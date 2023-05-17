@@ -1,0 +1,17 @@
+@import './component/header/header.scss';
+@import './component/main/main.scss';
+@import './component/footer/footer.scss';
+@import './component/item/item.scss';
+
+@import './content/home/home.scss';
+@import './content/follow/follow.scss';
+
+
+article {
+  opacity: 0.8;
+}
+
+.app-flex-end {
+  display: flex;
+  justify-content: flex-end;
+}

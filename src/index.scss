@@ -1,0 +1,18 @@
+$feature-flags: (
+  grid-columns-16: true
+);
+
+@import 'carbon-components/scss/globals/scss/styles.scss';
+@import 'carbon-components/scss/globals/grid/grid';
+
+body {
+  margin: 0;
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
