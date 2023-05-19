@@ -15,29 +15,34 @@ import {
 import { AuthContext } from '../../App';
 
 
-const AppHeader = () => {
+const AppHeader = ({ count }) => {
 
   const navigate = useNavigate();
 
   const { auth, setAuth } = useContext(AuthContext);
   const { user } = auth;
 
-  const sideNavs = [
-    {
+  const sideNavs =
+  {
+    user: {
+      id: 'user',
       label: user ? user.name : 'unknow',
       path: '/'
     },
-    {
+    following: {
+      id: 'following',
       label: 'Following',
       path: '/followings'
     },
-    {
+    follower: {
+      id: 'follower',
       label: 'Follower',
       path: '/followers'
     }
-  ];
+  };
 
-  const [sideNavActive, setSideNavActive] = useState(sideNavs[0]);
+
+  const [sideNavActive, setSideNavActive] = useState(Object.values(sideNavs)[0]);
 
   return (
     <HeaderContainer
@@ -52,7 +57,7 @@ const AppHeader = () => {
               <SideNav aria-label='Side menu'>
                 <SideNavItems>
                   {
-                    sideNavs.map((item, index) =>
+                    Object.values(sideNavs).map((item, index) =>
                       <div className='app-badge-container' key={index}>
                         <SideNavLink
                           element={Link}
@@ -64,7 +69,7 @@ const AppHeader = () => {
                         </SideNavLink>
                         {
                           index > 0 &&
-                          <div className='app-badge'>{index * 2}</div>
+                          <div className='app-badge'>{count[item.id]}</div>
                         }
                       </div>
                     )

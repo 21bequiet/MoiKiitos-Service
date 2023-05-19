@@ -4,11 +4,16 @@ import { TextArea, Button } from 'carbon-components-react';
 
 import { AuthContext } from '../../App';
 import AppItemList from '../../component/item/item-list';
-import { getPosts, savePost } from '../../component/services/services';
+import { getPosts, savePost, getCount } from '../../component/services/services';
 import { validate } from '../../component/validator/validator';
 
 
-const AppHome = () => {
+const AppHome = (
+  {
+    count,
+    setCount
+  }
+) => {
 
   const { auth } = useContext(AuthContext);
   const { user } = auth;
@@ -28,7 +33,10 @@ const AppHome = () => {
   );
 
   useEffect(() => {
-    getPosts(user.name).then(data => setPosts(data.map(item => ({ ...item, user: item.userName }))));
+    getPosts().then(data => {
+      setPosts(data.map(item => ({ ...item, user: item.userName })))
+    });
+    getCount(user.name).then(data => setCount({ following: data.followingCount, follower: data.followerCount }));
   },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -68,7 +76,11 @@ const AppHome = () => {
         </Button>
       </div>
 
-      <AppItemList items={posts} />
+      <AppItemList
+        items={posts}
+        count={count}
+        setCount={setCount}
+      />
     </>
   )
 };

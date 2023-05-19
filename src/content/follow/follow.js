@@ -7,7 +7,13 @@ import AppItem from '../../component/item/item';
 import { getFollowings, getFollowers } from '../../component/services/services';
 
 
-const AppFollow = ({ tabIndex }) => {
+const AppFollow = (
+  {
+    tabIndex,
+    count,
+    setCount
+  }
+) => {
 
   const { auth } = useContext(AuthContext);
   const { user } = auth
@@ -44,7 +50,13 @@ const AppFollow = ({ tabIndex }) => {
         >
           {
             followings.map((item, row) =>
-              <AppItem key={row} item={item} />
+              <AppItem
+                key={row}
+                item={item}
+                count={count}
+                setCount={setCount}
+                setFollowings={setFollowings}
+              />
             )
           }
         </Tab>
@@ -55,7 +67,11 @@ const AppFollow = ({ tabIndex }) => {
         >
           {
             followers.map((item, row) =>
-              <AppItem key={row} item={item} />
+              <AppItem
+                key={row}
+                item={item}
+                follower={true}
+              />
             )
           }
         </Tab>

@@ -1,11 +1,10 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { Button, TextInput } from 'carbon-components-react';
 
 import { AuthContext } from '../../App';
 import { validate, validateMany } from '../validator/validator';
-
+import { login } from '../../component/services/services';
 const AppLogin = () => {
 
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ const AppLogin = () => {
 
   return (
     <>
-      <h1>Welcom</h1>
+      <h1>Welcome</h1>
       <TextInput
         id={validation.name.id}
         type="text"
@@ -73,8 +72,25 @@ const AppLogin = () => {
             return;
           }
 
-          auth.setAuth({ isAuth: true, user: { name: user.name } })
-          navigate('/')
+          // call api
+          // 1. handle existing user
+          // 2. check password
+          login(user.name, user.password).then(data => {
+            console.log(data);
+
+            if (data == "OK") {
+              auth.setAuth({ isAuth: true, user: { name: user.name } });
+              navigate('/');
+            } else {
+              console.log(alert("User is not exist or password is invalid, please register/re-login"));
+            }
+
+          })
+
+
+          // pass
+          //auth.setAuth({ isAuth: true, user: { name: user.name } });
+          //navigate('/');
         }}
       >
         Submit

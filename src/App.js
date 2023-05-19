@@ -12,14 +12,15 @@ export const AuthContext = createContext();
 function App() {
 
   const [auth, setAuth] = useState({ isAuth: false, user: undefined });
+  const [count, setCount] = useState({ following: 0, follower: 0 });
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
-      <AppHeader />
+      <AppHeader count={count} />
       {
         auth.isAuth
           ?
-          <AppMain />
+          <AppMain count={count} setCount={setCount} />
           :
           <AppAuth />
       }

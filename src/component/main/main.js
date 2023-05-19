@@ -6,28 +6,27 @@ import AppHome from '../../content/home/home';
 import AppFollow from '../../content/follow/follow';
 import AppFooter from '../../component/footer/footer';
 
-const AppMain = () => {
+const AppMain = (
+  {
+    count,
+    setCount
+  }
+) => {
   return (
     <>
       <Content className='app-main'>
         <Routes>
-          {/* <Route
-            path='/authorization-code/callback'
-            element={
-              <Navigate to="/" replace="true" />
-            }
-          /> */}
           <Route
             path='/'
-            element={<AppHome />}
+            element={<AppHome count={count} setCount={setCount} />}
           />
           <Route
             path='/followings'
-            element={<AppFollow tabIndex={0} />}
+            element={<AppFollow tabIndex={0} count={count} setCount={setCount} />}
           />
           <Route
             path='/followers'
-            element={<AppFollow tabIndex={1} />}
+            element={<AppFollow tabIndex={1} count={count} setCount={setCount} />}
           />
         </Routes>
       </Content>

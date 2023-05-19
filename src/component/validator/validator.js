@@ -76,8 +76,6 @@ export const validate = (name, value, validators) => {
 export const validateMany = (object, validation) => {
   let valid = true, error = undefined;
 
-
-  console.log(Object.values(validation));
   Object.values(validation).forEach(item => {
     if (item.validators) {
       const result = validate(item.name, object[item.id], item.validators);
