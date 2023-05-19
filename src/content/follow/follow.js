@@ -1,25 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import { Tabs, Tab, Search } from 'carbon-components-react';
 
+import { AuthContext } from '../../App';
 import AppItem from '../../component/item/item';
 import { getFollowings, getFollowers } from '../../component/services/services';
 
 
 const AppFollow = ({ tabIndex }) => {
 
+  const { auth } = useContext(AuthContext);
+  const { user } = auth
+
+
   const [followings, setFollowings] = useState([]);
   const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
-    getFollowings('Jack').then(data => {
+    getFollowings(user.name).then(data => {
       setFollowings(data.map(item => ({ user: item.userName, content: item.email })));
     });
 
-    getFollowers('Jack').then(data => {
+    getFollowers(user.name).then(data => {
       setFollowers(data.map(item => ({ user: item.userName, content: item.email })));
     })
-  }, []);
+  },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   return (
     <>
@@ -53,7 +61,6 @@ const AppFollow = ({ tabIndex }) => {
         </Tab>
       </Tabs >
     </>
-
   )
 };
 

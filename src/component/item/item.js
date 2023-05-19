@@ -1,30 +1,35 @@
+import { useContext } from 'react';
+
+import { Row, Column, Link } from 'carbon-components-react';
+
+import { AuthContext } from '../../App';
+import { follow } from '../../component/services/services';
+
 const AppItem = ({ item }) => {
+
+  const { auth } = useContext(AuthContext);
+  const { user } = auth;
+
   return (
-    <>
-      {/* <div className='app-item'>
-        <div className='app-item-user'>Tom</div>
-        <article>Use the on-page list variant when placing the list on the general page of a user interface. On-page lists typically appear in smaller spaces, like in a card or sidebars. The on-page list styling has no visible background header with fixed information. If there are scrolling capabilities, the header will remain sticky and have a background layer to differentiate it from the list item rows scrolling beneath it.</article>
-      </div>
-
-      <div className='app-item app-item-reverse'>
-        <div className='app-post-item-user'>Jack</div>
-        <article>Use the on-page list variant when placing the list on the general page of a user interface. On-page lists typically appear in smaller spaces, like in a card or sidebars. The on-page list styling has no visible background header with fixed information. If there are scrolling capabilities, the header will remain sticky and have a background layer to differentiate it from the list item rows scrolling beneath it.</article>
-      </div>
-
-      <div className='app-item'>
-        <div className='app-item-user'>Lucy</div>
-        <article>Use the on-page list variant when placing the list on the general page of a user interface. On-page lists typically appear in smaller spaces, like in a card or sidebars. The on-page list styling has no visible background header with fixed information. If there are scrolling capabilities, the header will remain sticky and have a background layer to differentiate it from the list item rows scrolling beneath it.</article>
-      </div>
-
-      <div className='app-item'>
-        <div className='app-item-user'>John</div>
-        <article>Use the on-page list variant when placing the list on the general page of a user interface. On-page lists typically appear in smaller spaces, like in a card or sidebars. The on-page list styling has no visible background header with fixed information. If there are scrolling capabilities, the header will remain sticky and have a background layer to differentiate it from the list item rows scrolling beneath it.</article>
-      </div> */}
-      <div className='app-item'>
-        <div className='app-item-user'>{item.user}</div>
-        <article>{item.content}</article>
-      </div>
-    </>
+    <Row style={item.user === user.name ? { flexDirection: 'row-reverse' } : {}}>
+      <Column style={{ textAlign: 'center' }} lg={{ span: 1 }}>
+        {
+          item.user === user.name
+            ?
+            <>{item.user}</>
+            :
+            <Link
+              className='app-link'
+              onClick={_ => {
+                follow(user.name, { userName: item.user }).then(data => console.log('followed->', data));
+              }}
+            >
+              {item.user}
+            </Link>
+        }
+      </Column>
+      <Column>{item.content}</Column>
+    </Row>
   )
 };
 

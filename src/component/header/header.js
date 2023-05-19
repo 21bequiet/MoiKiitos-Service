@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Header,
@@ -12,23 +12,30 @@ import {
   SideNavLink
 } from 'carbon-components-react';
 
+import { AuthContext } from '../../App';
 
-export const sideNavs = [
-  {
-    label: 'Jack',
-    path: '/'
-  },
-  {
-    label: 'Following',
-    path: '/followings'
-  },
-  {
-    label: 'Follower',
-    path: '/followers'
-  }
-]
 
 const AppHeader = () => {
+
+  const navigate = useNavigate();
+
+  const { auth, setAuth } = useContext(AuthContext);
+  const { user } = auth;
+
+  const sideNavs = [
+    {
+      label: user ? user.name : 'unknow',
+      path: '/'
+    },
+    {
+      label: 'Following',
+      path: '/followings'
+    },
+    {
+      label: 'Follower',
+      path: '/followers'
+    }
+  ];
 
   const [sideNavActive, setSideNavActive] = useState(sideNavs[0]);
 
@@ -40,37 +47,47 @@ const AppHeader = () => {
             <HeaderName prefix=''>
               <span>Moi Kiitos</span>
             </HeaderName>
-
-            <SideNav aria-label='Side menu'>
-              <SideNavItems>
-                {
-                  sideNavs.map((item, index) =>
-                    <div className='app-builder-badge-container' key={index}>
-                      <SideNavLink
-                        element={Link}
-                        isActive={sideNavActive.label === item.label}
-                        to={item.path}
-                        onClick={_ => setSideNavActive(item)}
-                      >
-                        {item.label}
-                      </SideNavLink>
-                      {
-                        index > 0 &&
-                        <div className='app-builder-badge'>{index * 2}</div>
-                      }
-                    </div>
-                  )
-                }
-              </SideNavItems>
-            </SideNav>
+            {
+              auth.isAuth &&
+              <SideNav aria-label='Side menu'>
+                <SideNavItems>
+                  {
+                    sideNavs.map((item, index) =>
+                      <div className='app-badge-container' key={index}>
+                        <SideNavLink
+                          element={Link}
+                          isActive={sideNavActive.label === item.label}
+                          to={item.path}
+                          onClick={_ => setSideNavActive(item)}
+                        >
+                          {item.label}
+                        </SideNavLink>
+                        {
+                          index > 0 &&
+                          <div className='app-badge'>{index * 2}</div>
+                        }
+                      </div>
+                    )
+                  }
+                </SideNavItems>
+              </SideNav>
+            }
 
             <HeaderGlobalBar>
-              <HeaderGlobalAction aria-label='Login' onClick={_ => console.log('login')}>
-                Login
-              </HeaderGlobalAction>
-              <HeaderGlobalAction aria-label='Logout' onClick={_ => console.log('logout')}>
-                Logout
-              </HeaderGlobalAction>
+              {
+                auth.isAuth
+                  ?
+                  <HeaderGlobalAction aria-label='Logout' onClick={_ => {
+                    setAuth({ isAuth: false, user: undefined });
+                    navigate('/');
+                  }}>
+                    Logout
+                  </HeaderGlobalAction>
+                  :
+                  <HeaderGlobalAction aria-label='Login' onClick={_ => navigate('/register')}>
+                    Sign Up
+                  </HeaderGlobalAction>
+              }
             </HeaderGlobalBar>
           </Header >
         )

@@ -1,33 +1,74 @@
-import { useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import { TextArea, Button } from 'carbon-components-react';
 
-import AppItem from '../../component/item/item';
+import { AuthContext } from '../../App';
+import AppItemList from '../../component/item/item-list';
+import { getPosts, savePost } from '../../component/services/services';
+import { validate } from '../../component/validator/validator';
+
 
 const AppHome = () => {
 
+  const { auth } = useContext(AuthContext);
+  const { user } = auth;
+
   const [posts, setPosts] = useState([]);
+
+  const [post, setPost] = useState(undefined);
+  const [validation, setValidation] = useState(
+    {
+      name: 'Content',
+      invalid: false,
+      invalidText: undefined,
+      validators: [
+        { name: 'required' }
+      ]
+    }
+  );
+
+  useEffect(() => {
+    getPosts(user.name).then(data => setPosts(data.map(item => ({ ...item, user: item.userName }))));
+  },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   return (
     <>
       <TextArea
         id='post'
-        labelText=''
         placeholder='Type something here...'
+        hideLabel={true}
+        labelText={''}
+        invalid={validation.invalid}
+        invalidText={validation.invalidText}
+        enableCounter={true}
+        maxCount={500}
+        value={post}
+        onChange={e => setPost(e.target.value)}
+        onBlur={e => {
+          const result = validate(validation.name, e.target.value, validation.validators);
+          setValidation({ ...validation, invalid: result.invalid, invalidText: result.invalidText })
+        }}
       />
+
       <div style={{ marginTop: '1rem' }} className='app-flex-end'>
-        <Button>Post</Button>
+        <Button
+          onClick={_ => {
+            const result = validate(validation.name, post, validation.validators);
+            if (result.invalid) {
+              setValidation({ ...validation, invalid: result.invalid, invalidText: result.invalidText })
+              return;
+            }
+            savePost({ userName: user.name, content: post }).then(data => setPosts([{ user: data.userName, content: data.content }, ...posts]));
+          }}
+        >
+          Post
+        </Button>
       </div>
-      <div style={{ marginTo: '2rem' }}>
-        {
-          // Array.from(Array(1)).map((_, row) =>
-          //   <AppItem key={row} />
-          // )
-          posts.map((item, row) =>
-            <AppItem key={row} item={item} />
-          )
-        }
-      </div>
+
+      <AppItemList items={posts} />
     </>
   )
 };

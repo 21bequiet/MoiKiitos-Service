@@ -1,20 +1,10 @@
-.app-item {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
+.bx--grid {
+  margin: 2rem 0 0 0;
+  padding: 0;
+}
+
+.bx--row {
+  margin: 1rem 0;
   padding: 1rem 0;
   background-color: #f5f5f5;
-}
-
-.app-item-reverse {
-  flex-direction: row-reverse;
-}
-
-.app-item .app-item-user {
-  width: 160px;
-  text-align: center;
-}
-
-.app-item article {
-  padding: 0 1rem;
 }
