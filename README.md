@@ -2,9 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Pre-Conditions
+
+Node.js 16.20
+
 ## Available Scripts
 
 In the project directory, you can run:
+
+### npm install
+### npm start
 
 ### `yarn start`
 
